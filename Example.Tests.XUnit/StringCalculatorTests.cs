@@ -1,133 +1,125 @@
 ﻿using StringCalculatorKata;
 
-namespace StringCalculatorKataTestsX
+namespace Example.Tests.XUnit;
+
+public class StringCalculatorTests
 {
-    public class StringCalculatorTests
+    [Theory]
+    [InlineData("1", 1)]
+    public void GivenOneNumber_ShouldReturnThatNumber(string numbers, int expected)
     {
-        [Fact]
-        public void GivenOneNumber_ShouldReturnThatNumber()
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-            var numbers = "1";
-            var expected = 1;
+        // Arrange
+        var sut = CreateStringCalculator();
 
-            // Act
-            var actual = sut.Add(numbers);
+        // Act
+        var actual = sut.Add(numbers);
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GivenManyNumber_ShouldReturnTheSumOfThoseNumbers()
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-            var numbers = "1,2";
-            var expected = 3;
-
-            // Act
-            var actual = sut.Add(numbers);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(null, 0)]
-        [InlineData("", 0)]
-        [InlineData(" ", 0)]
-        [InlineData("     ", 0)]
-        public void GivenNoNumbers_ShouldReturn0(string numbers, int expected)
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-
-            // Act
-            var actual = sut.Add(numbers);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GivenNewLineDelimiter_ShouldReturnTheSumOfAllNumbers()
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-            var numbers = "8\n13";
-            var expected = 21;
-
-            // Act
-            var actual = sut.Add(numbers);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GivenCustomDelimiter_ShouldReturnTheSumOfAllNumbers()
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-            var numbers = "//;\n123;321";
-            var expected = 444;
-
-            // Act
-            var actual = sut.Add(numbers);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GivenNegativeNumber_ShouldThrowException()
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-            var numbers = "//;\n123;-1";
-            var expected = "negatives not allowed -1";
-
-            // Act & Assert
-            var exception = Assert.Throws<Exception>(() => sut.Add(numbers));
-            Assert.Equal(expected, exception.Message);
-        }
-
-        [Fact]
-        public void GivenCustomDelimiterOfAnyLength_ShouldReturnTheSumOfAllNumbers()
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-            var numbers = "//[^]\n10^11\n12";
-            var expected = 33;
-
-            // Act
-            var actual = sut.Add(numbers);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        
-        [Theory]
-        [InlineData("//[^][%%]\n10^11%%12", 33)]
-        public void GivenMultipleCustomDelimitersOfAnyLength_ShouldReturnTheSumOfAllNumbers(string numbers,int expected)
-        {
-            // Arrange
-            var sut = CreateStringCalculator();
-           
-
-            // Act
-            var actual = sut.Add(numbers);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        private static StringCalculator CreateStringCalculator()
-        {
-            return new StringCalculator();
-        }
+        // Assert
+        Assert.Equal(expected, actual);
     }
+
+    [Theory]
+    [InlineData("1,2", 3)]
+    public void GivenManyNumber_ShouldReturnTheSumOfThoseNumbers(string numbers, int expected)
+    {
+        // Arrange
+        var sut = CreateStringCalculator();
+
+        // Act
+        var actual = sut.Add(numbers);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(null, 0)]
+    [InlineData("", 0)]
+    [InlineData(" ", 0)]
+    [InlineData("     ", 0)]
+    public void GivenNoNumbers_ShouldReturn0(string numbers, int expected)
+    {
+        // Arrange
+        var sut = CreateStringCalculator();
+
+        // Act
+        var actual = sut.Add(numbers);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("8\n13", 21)]
+    public void GivenNewLineDelimiter_ShouldReturnTheSumOfAllNumbers(string numbers, int expected)
+    {
+        // Arrange
+        var sut = CreateStringCalculator();
+
+        // Act
+        var actual = sut.Add(numbers);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("//;\n123;321", 444)]
+    public void GivenCustomDelimiter_ShouldReturnTheSumOfAllNumbers(string numbers, int expected)
+    {
+        // Arrange
+        var sut = CreateStringCalculator();
+
+        // Act
+        var actual = sut.Add(numbers);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("//;\n123;-1", "negatives not allowed -1")]
+    public void GivenNegativeNumber_ShouldThrowException(string numbers, string expected)
+    {
+        // Arrange
+        var sut = CreateStringCalculator();
+
+
+        // Act & Assert
+        var exception = Assert.Throws<Exception>(() => sut.Add(numbers));
+        Assert.Equal(expected, exception.Message);
+    }
+
+    [Theory]
+    [InlineData("//[^]\n10^11\n12", 33)]
+    public void GivenCustomDelimiterOfAnyLength_ShouldReturnTheSumOfAllNumbers(string numbers, int expected)
+    {
+        // Arrange
+        var sut = CreateStringCalculator();
+
+        // Act
+        var actual = sut.Add(numbers);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+
+    [Theory]
+    [InlineData("//[^][%%]\n10^11%%12", 33)]
+    public void GivenMultipleCustomDelimitersOfAnyLength_ShouldReturnTheSumOfAllNumbers(string numbers,
+        int expected)
+    {
+        // Arrange
+        var sut = CreateStringCalculator();
+
+
+        // Act
+        var actual = sut.Add(numbers);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    private static StringCalculator CreateStringCalculator() => new();
 }
